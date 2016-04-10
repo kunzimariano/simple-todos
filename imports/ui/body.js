@@ -24,7 +24,8 @@ Template.body.helpers({
     return Tasks.find({}, { sort: { createdAt: -1 } });
   },
   incompleteCount() {
-    return Tasks.find({ checked: { $ne: true } }).count();
+    return Tasks.find({ checked: { $ne: true } })
+      .count();
   },
 });
 
@@ -38,12 +39,7 @@ Template.body.events({
     const text = target.text.value;
 
     // Insert a task into the collection
-    Tasks.insert({
-      text,
-      createdAt: new Date(), // current time
-      owner: Meteor.userId(),
-      username: Meteor.user().username,
-    });
+    Meteor.call('tasks.insert', text);
 
     // Clear form
     target.text.value = '';
